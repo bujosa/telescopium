@@ -7,6 +7,8 @@ deploy:
 build:
   local:
     push: false
+  googleCloudBuild:
+    projectId: ticketing-dev-305703
   artifacts:
     - image: bujosa/auth
       context: auth
