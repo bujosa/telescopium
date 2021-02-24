@@ -1,9 +1,8 @@
-import express from "express";
-import { Response } from "express";
+import express, { Response, Request } from "express";
 
 const router = express.Router();
 
-router.post("/api/users/signout", (res: Response) => {
+router.post("/api/users/signout", (req: Request, res: Response) => {
   res.send("Hi there");
 });
 
