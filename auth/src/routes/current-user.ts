@@ -1,9 +1,8 @@
-import express from "express";
-import { Response } from "express";
+import express, { Response, Request } from "express";
 
 const router = express.Router();
 
-router.get("/api/users/currentuser", (res: Response) => {
+router.get("/api/users/currentuser", (req: Request, res: Response) => {
   res.send("Hi there");
 });
 
