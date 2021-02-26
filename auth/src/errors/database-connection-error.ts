@@ -1,4 +1,6 @@
-export class DatabaseConnectionError extends Error {
+import { ICustomError } from "../interfaces/custom-error.interface";
+
+export class DatabaseConnectionError extends Error implements ICustomError {
   statusCode = 500;
   reason = "Error connecting to database";
 
