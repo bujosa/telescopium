@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { UserModel } from "../interfaces/user-model.interface";
 import { IUser } from "../interfaces/user.interface";
 
 const userSchema = new mongoose.Schema({
@@ -12,10 +13,10 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-const User = mongoose.model("User", userSchema);
-
-const buildUser = (user: IUser) => {
+userSchema.statics.build = (user: IUser) => {
   return new User(user);
 };
 
-export { User, buildUser };
+const User = mongoose.model<any, UserModel>("User", userSchema);
+
+export { User };
