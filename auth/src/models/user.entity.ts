@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { UserDoc, UserModel } from "../interfaces/user-model.interface";
 import { IUser } from "../interfaces/user.interface";
+import { Password } from "../services/user.service";
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -12,6 +13,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+});
+
+userSchema.pre("save", async function (done) {
+  if (this.isModified("password")) {
+    const hashed = await Password.toHash(this.get("password"));
+    this.set("password", hashed);
+  }
+  done();
 });
 
 userSchema.statics.build = (user: IUser) => {
