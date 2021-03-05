@@ -6,6 +6,6 @@ export const createSession = (user: any) => {
       id: user.id,
       email: user.email,
     },
-    `${process.env.JWT}`
+    process.env.JWT!
   );
 };
