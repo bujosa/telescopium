@@ -9,6 +9,9 @@ import { signoutRouter } from "./routes/signout";
 import { signupRouter } from "./routes/signup";
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found-error";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 app.set("trust proxy", true);
@@ -33,7 +36,7 @@ app.use(errorHandler);
 
 const start = async () => {
   try {
-    await mongoose.connect("mongodb://auth-mongo-Service:27017/auth", {
+    await mongoose.connect(`${process.env.MONGO_URL}`, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
@@ -41,8 +44,8 @@ const start = async () => {
   } catch (error) {
     console.log(error);
   }
-  app.listen(3000, () => {
-    console.log("Listening on port 3000");
+  app.listen(process.env.PORT, () => {
+    console.log(`Listening on port ${process.env.PORT}`);
   });
 };
 

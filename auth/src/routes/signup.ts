@@ -43,8 +43,10 @@ router.post(
         id: user.id,
         email: user.email,
       },
-      "secret"
+      `${process.env.JWT}`
     );
+
+    console.log(process.env.JWT);
 
     req.session = {
       jwt: userJwt,
