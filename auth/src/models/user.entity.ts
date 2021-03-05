@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { UserDoc, UserModel } from "../interfaces/user-model.interface";
+import { IUserDoc, IUserModel } from "../interfaces/user-model.interface";
 import { IUser } from "../interfaces/user.interface";
 import { Password } from "../services/user.service";
 
@@ -39,6 +39,6 @@ userSchema.statics.build = (user: IUser) => {
   return new User(user);
 };
 
-const User = mongoose.model<UserDoc, UserModel>("User", userSchema);
+const User = mongoose.model<IUserDoc, IUserModel>("User", userSchema);
 
 export { User };

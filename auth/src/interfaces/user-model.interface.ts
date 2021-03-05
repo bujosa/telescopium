@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 import { IUser } from "./user.interface";
 
-export interface UserModel extends mongoose.Model<UserDoc> {
-  build(user: IUser): UserDoc;
+export interface IUserModel extends mongoose.Model<IUserDoc> {
+  build(user: IUser): IUserDoc;
 }
 
-export interface UserDoc extends mongoose.Document {
+export interface IUserDoc extends mongoose.Document {
   email: string;
   password: string;
 }
