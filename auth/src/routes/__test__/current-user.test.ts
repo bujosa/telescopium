@@ -11,9 +11,9 @@ it(`responds with details about the current user`, async () => {
     .expect(201);
 
   const response = await request(app)
-    .post("/api/users/currentuser")
+    .get("/api/users/currentuser")
     .send()
     .expect(200);
 
-  console.log(response);
+  console.log(response.body);
 });
