@@ -1,3 +1,7 @@
 export default () => {
-  return <div>Banana</div>;
+  return (
+    <div>
+      <h1>Banana</h1>
+    </div>
+  );
 };
