@@ -1,6 +1,6 @@
 {
   "name": "@ticketing-bujosa/common",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
@@ -8,9 +8,9 @@
     "./build/**/*"
   ],
   "scripts": {
-    "clean": "del ./build/*",
+    "clean": "rd /s /q build>nul 2>&1|echo.>nul",
     "build": "npm run clean && tsc",
-    "pub": "git add . && git commit -m \"Updates\" && npm version patch && npm publish"
+    "pub": "git add . && git commit -m \"Updates\" && npm version patch && npm run build && npm publish"
   },
   "keywords": [],
   "author": "",
