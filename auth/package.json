@@ -18,6 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@ticketing-bujosa/common": "^1.0.10",
     "@types/cookie-session": "^2.0.42",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.11",

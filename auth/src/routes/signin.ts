@@ -1,7 +1,6 @@
 import express, { Response, Request } from "express";
 import { body } from "express-validator";
-import { BadRequestError } from "../errors/bad-request-error";
-import { validateRequest } from "../middlewares/validate-request";
+import { BadRequestError, validateRequest } from "@ticketing-bujosa/common";
 import { User } from "../models/user.entity";
 import { Password } from "../services/user.service";
 import { createSession } from "../utils/create-jwt-session";
