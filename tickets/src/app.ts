@@ -2,7 +2,11 @@ import express from "express";
 import "express-async-errors";
 import { json } from "body-parser";
 import cookieSession from "cookie-session";
-import { errorHandler, NotFoundError } from "@ticketing-bujosa/common";
+import {
+  currentUser,
+  errorHandler,
+  NotFoundError,
+} from "@ticketing-bujosa/common";
 import * as dotenv from "dotenv";
 import { createTicketRouter } from "./routes/new";
 
@@ -18,6 +22,7 @@ app.use(
     secure: process.env.NODE_ENV !== "test",
   })
 );
+app.use(currentUser);
 
 app.use(createTicketRouter);
 
