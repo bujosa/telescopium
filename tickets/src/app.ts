@@ -4,6 +4,7 @@ import { json } from "body-parser";
 import cookieSession from "cookie-session";
 import { errorHandler, NotFoundError } from "@ticketing-bujosa/common";
 import * as dotenv from "dotenv";
+import { createTicketRouter } from "./routes/new";
 
 dotenv.config();
 
@@ -17,6 +18,8 @@ app.use(
     secure: process.env.NODE_ENV !== "test",
   })
 );
+
+app.use(createTicketRouter);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();
