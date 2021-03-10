@@ -10,7 +10,7 @@ import {
 import * as dotenv from "dotenv";
 import { createTicketRouter } from "./routes/new";
 import { showTicketRouter } from "./routes/show";
-import { indexTicketRouter } from "./routes";
+import { getAllTicketsRouter } from "./routes/tickets";
 import { updateTicketRouter } from "./routes/update";
 
 dotenv.config();
@@ -29,7 +29,7 @@ app.use(currentUser);
 
 app.use(createTicketRouter);
 app.use(showTicketRouter);
-app.use(indexTicketRouter);
+app.use(getAllTicketsRouter);
 app.use(updateTicketRouter);
 
 app.all("*", async (req, res) => {
