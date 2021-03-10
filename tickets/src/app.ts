@@ -9,6 +9,7 @@ import {
 } from "@ticketing-bujosa/common";
 import * as dotenv from "dotenv";
 import { createTicketRouter } from "./routes/new";
+import { showTicketRouter } from "./routes/show";
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use(
 app.use(currentUser);
 
 app.use(createTicketRouter);
+app.use(showTicketRouter);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();
