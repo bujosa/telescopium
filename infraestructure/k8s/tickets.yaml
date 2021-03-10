@@ -1,30 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-deployment 
+  name: tickets-deployment 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: tickets
   template:
       metadata:
         labels:
-          app: auth
+          app: tickets
       spec:
         containers:
-          - name: auth
-            image: us.gcr.io/ticketing-dev-305703/auth
+          - name: tickets
+            image: us.gcr.io/ticketing-dev-305703/tickets
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-service
+  name: tickets-service
 spec:
   selector:
-    app: auth
+    app: tickets
   ports:
-    - name: auth
+    - name: tickets
       protocol: TCP
       port: 3000
       targetPort: 3000
