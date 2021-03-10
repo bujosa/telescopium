@@ -44,7 +44,6 @@ it("Returns a 401 if ther user provides and invalid title or price", async () =>
     .set("Cookie", global.signin())
     .send({
       title: "test",
-      price: 20,
     })
     .expect(401);
 });
