@@ -24,7 +24,7 @@ spec:
               '-hbi',
               '5s',
               '-hbf',
-              's',
+              '2',
               '-SD',
               '-cid',
               'ticketing'
