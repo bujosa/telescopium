@@ -1,4 +1,4 @@
-import { Subjects } from "../events/subjects";
+import { Subjects } from "../enums/subjects";
 
 export interface ITicketCreatedEvent {
   subject: Subjects.TicketCreated;
