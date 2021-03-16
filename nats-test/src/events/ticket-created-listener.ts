@@ -1,6 +1,6 @@
 import { Message } from "node-nats-streaming";
 import { Subjects } from "../enums/subjects";
-import { Listener } from "../events/base-listener";
+import { Listener } from "../bases/base-listener";
 import { ITicketCreatedEvent } from "../interfaces/ticket-created-event.interface";
 
 export class TicketCreatedListener extends Listener<ITicketCreatedEvent> {
