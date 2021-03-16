@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 import { app } from "./app";
+import { natsWraper } from "./nats-wrapper";
 
 const start = async () => {
   try {
+    await natsWraper.connect("ticketing", "dfrfrf", "http://nats-service:4222");
     await mongoose.connect(process.env.MONGO_URL!, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
