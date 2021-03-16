@@ -1,6 +1,7 @@
 import { requireAuth, validateRequest } from "@ticketing-bujosa/common";
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
+import { TicketCreatedPublisher } from "../events/publishers/ticket-created-publisher";
 import { Ticket } from "../models/ticket";
 
 const router = express.Router();
@@ -23,6 +24,13 @@ router.post(
       user: req.currentUser!.id,
     });
     await ticket.save();
+
+    new TicketCreatedPublisher(client).publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      user: ticket.user,
+    });
     res.status(201).send(ticket);
   }
 );
