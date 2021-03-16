@@ -1,5 +1,5 @@
 import { Message } from "node-nats-streaming";
-import { Listener } from "../abstracts/listener.abstract";
+import { Listener } from "../events/base-listener";
 
 export class TicketCreatedListener extends Listener {
   subject = "ticket:created";
