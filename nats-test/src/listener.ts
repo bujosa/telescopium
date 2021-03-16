@@ -1,4 +1,4 @@
-import nats, { Message } from "node-nats-streaming";
+import nats from "node-nats-streaming";
 import { randomBytes } from "crypto";
 import { TicketCreatedListener } from "./classes/ticker-created-listener.class";
 
