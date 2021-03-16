@@ -1,5 +1,4 @@
 import { Stan } from "node-nats-streaming";
-import { Console } from "node:console";
 import { IEvent } from "../interfaces/event.interface";
 
 export abstract class Publisher<T extends IEvent> {
@@ -10,9 +9,14 @@ export abstract class Publisher<T extends IEvent> {
     this.client = client;
   }
 
-  publish(data: T["data"]) {
-    this.client.publish(this.subject, data, () => {
-      console.log("Event published");
+  publish(data: T["data"]): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.client.publish(this.subject, JSON.stringify(data), (err) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve();
+      });
     });
   }
 }
