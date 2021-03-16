@@ -14,7 +14,7 @@ stan.on("connect", () => {
     process.exit();
   });
 
-  new TicketCreatedListener(stan);
+  new TicketCreatedListener(stan).listen();
 });
 
 process.on("SIGINT", () => stan.close());
