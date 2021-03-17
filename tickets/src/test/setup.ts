@@ -5,15 +5,19 @@ import jwt from "jsonwebtoken";
 declare global {
   namespace NodeJS {
     interface Global {
-      signin(): string;
+      signin(): string[];
     }
   }
 }
+
+jest.mock("../nats-wrapper");
 
 let mongo: any;
 
 beforeAll(async () => {
   process.env.JWT = "bujosa";
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
   mongo = new MongoMemoryServer();
   const mongoUri = await mongo.getUri();
 
@@ -43,9 +47,12 @@ global.signin = () => {
   };
 
   const token = jwt.sign(payload, process.env.JWT!);
+
   const session = { jwt: token };
+
   const sessionJSON = JSON.stringify(session);
+
   const base64 = Buffer.from(sessionJSON).toString("base64");
 
-  return `express:sess=${base64}`;
+  return [`express:sess=${base64}`];
 };
