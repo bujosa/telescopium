@@ -1,17 +1,15 @@
 import mongoose from "mongoose";
 import { app } from "./app";
 import { natsWraper } from "./nats-wrapper";
+import { randomBytes } from "crypto";
 
 const start = async () => {
-  if (!process.env.JWT) {
-    throw new Error("JWT_KEY must be defined");
-  }
-  if (!process.env.MONGO_URI) {
-    throw new Error("MONGO_URI must be defined");
-  }
-
   try {
-    await natsWraper.connect("ticketing", "dfrfrf", "http://nats-service:4222");
+    await natsWraper.connect(
+      process.env.NAST_CLUSTER_ID!,
+      randomBytes(4).toString("hex"),
+      process.env.NAST_URL!
+    );
     natsWraper.client.on("close", () => {
       console.log("Nats Connection closed");
       process.exit();
