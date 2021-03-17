@@ -3,6 +3,14 @@ import nats, { Stan } from "node-nats-streaming";
 class NatsWraper {
   private _client?: Stan;
 
+  get client() {
+    if (!this._client) {
+      throw new Error("Cannot access NATS client before connecting");
+    }
+
+    return this._client;
+  }
+
   connect(cluster: string, client: string, url: string): Promise<void> {
     this._client = nats.connect(cluster, client, { url });
 
