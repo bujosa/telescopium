@@ -1,5 +1,7 @@
+import { OrderStatus } from "@ticketing-bujosa/common";
 import mongoose from "mongoose";
 import { Ticket, TicketDoc, TicketModel } from "../interfaces/ticket.interface";
+import { Order } from "./order";
 
 const ticketSchema = new mongoose.Schema(
   {
@@ -25,6 +27,21 @@ const ticketSchema = new mongoose.Schema(
 
 ticketSchema.statics.build = (ticket: Ticket) => {
   return new Ticket(ticket);
+};
+
+ticketSchema.methods.isReserved = async function () {
+  const existingOrder = await Order.findOne({
+    status: {
+      $in: [
+        OrderStatus.Created,
+        OrderStatus.AwaitingPayment,
+        OrderStatus.Complete,
+      ],
+    },
+    ticket: this,
+  });
+
+  return !!existingOrder;
 };
 
 const Ticket = mongoose.model<TicketDoc, TicketModel>("Ticket", ticketSchema);

@@ -8,6 +8,7 @@ export interface Ticket {
 export interface TicketDoc extends mongoose.Document {
   title: string;
   price: number;
+  isReserved(): Promise<boolean>;
 }
 
 export interface TicketModel extends mongoose.Model<TicketDoc> {

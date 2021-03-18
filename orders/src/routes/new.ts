@@ -1,14 +1,12 @@
 import {
   BadRequestError,
   NotFoundError,
-  OrderStatus,
   requireAuth,
   validateRequest,
 } from "@ticketing-bujosa/common";
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import mongoose from "mongoose";
-import { Order } from "../models/order";
 import { Ticket } from "../models/ticket";
 
 const router = express.Router();
@@ -31,18 +29,9 @@ router.post(
       throw new NotFoundError();
     }
 
-    const existingOrder = await Order.findOne({
-      ticket: ticket,
-      status: {
-        $in: [
-          OrderStatus.Created,
-          OrderStatus.AwaitingPayment,
-          OrderStatus.Complete,
-        ],
-      },
-    });
+    const isReserved = await ticket.isReserved();
 
-    if (existingOrder) {
+    if (isReserved) {
       throw new BadRequestError("Ticket is already reserved");
     }
 
