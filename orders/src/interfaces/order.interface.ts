@@ -14,3 +14,7 @@ export interface OrderDoc extends mongoose.Document {
   expiresAt: Date;
   ticket: TicketDoc;
 }
+
+export interface OrderModel extends mongoose.Model<OrderDoc> {
+  build(order: Order): OrderDoc;
+}

@@ -1,10 +1,6 @@
 import { OrderStatus } from "@ticketing-bujosa/common";
 import mongoose from "mongoose";
-import { Order, OrderDoc } from "../interfaces/order.interface";
-
-export interface OrderModel extends mongoose.Model<OrderDoc> {
-  build(order: Order): OrderDoc;
-}
+import { Order, OrderDoc, OrderModel } from "../interfaces/order.interface";
 
 const orderSchema = new mongoose.Schema(
   {
