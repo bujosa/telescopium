@@ -1,5 +1,6 @@
 import { OrderStatus } from "@ticketing-bujosa/common";
 import mongoose from "mongoose";
+import { TicketDoc } from "./ticket.interface";
 
 export interface Order {
   user: string;
