@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 export interface Order {
   user: string;
-  status: string;
+  status: OrderStatus;
   expiresAt: Date;
   ticket: TicketDoc;
 }
