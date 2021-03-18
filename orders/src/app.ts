@@ -8,6 +8,10 @@ import {
   NotFoundError,
 } from "@ticketing-bujosa/common";
 import * as dotenv from "dotenv";
+import { deleteOrderRouter } from "./routes/delete";
+import { indexOrderRouter } from "./routes";
+import { newOrderRouter } from "./routes/new";
+import { showOrderRouter } from "./routes/show";
 
 dotenv.config();
 
@@ -26,6 +30,11 @@ app.use(currentUser);
 app.all("*", async (req, res) => {
   throw new NotFoundError();
 });
+
+app.use(deleteOrderRouter);
+app.use(indexOrderRouter);
+app.use(newOrderRouter);
+app.use(showOrderRouter);
 
 app.use(errorHandler);
 
