@@ -11,6 +11,8 @@ export * from "./middlewares/require-auth";
 export * from "./middlewares/validate-request";
 
 export * from "./enums/subjects";
+export * from "./enums/order-status";
+
 export * from "./bases/base-listener";
 export * from "./bases/base-publisher";
 export * from "./interfaces/ticket-updated-event.interface";
