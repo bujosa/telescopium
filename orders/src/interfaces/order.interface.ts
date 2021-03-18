@@ -1,3 +1,4 @@
+import { OrderStatus } from "@ticketing-bujosa/common";
 import mongoose from "mongoose";
 
 export interface Order {
@@ -7,4 +8,9 @@ export interface Order {
   ticket: TicketDoc;
 }
 
-export interface OrderDoc extends mongoose.Document {}
+export interface OrderDoc extends mongoose.Document {
+  user: string;
+  status: OrderStatus;
+  expiresAt: Date;
+  ticket: TicketDoc;
+}

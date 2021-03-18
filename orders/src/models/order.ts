@@ -1,3 +1,4 @@
+import { OrderStatus } from "@ticketing-bujosa/common";
 import mongoose from "mongoose";
 import { Order, OrderDoc } from "../interfaces/order.interface";
 
@@ -14,6 +15,8 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
+      enum: Object.values(OrderStatus),
+      default: OrderStatus.Created,
     },
     expiresAt: {
       type: mongoose.Schema.Types.Date,
