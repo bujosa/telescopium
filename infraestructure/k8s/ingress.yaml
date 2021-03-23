@@ -18,11 +18,12 @@ spec:
             backend:
               serviceName: tickets-service
               servicePort: 3000
-          - path: /?(.*)
-            backend:
-              serviceName: client-service
-              servicePort: 3000
           - path: /api/orders/?(.*)
             backend:
               serviceName: orders-service
               servicePort: 3000
+          - path: /?(.*)
+            backend:
+              serviceName: client-service
+              servicePort: 3000
+         
