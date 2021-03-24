@@ -1,41 +1,38 @@
+import { OrderStatus } from "@ticketing-bujosa/common";
+import mongoose from "mongoose";
 import request from "supertest";
 import { app } from "../../app";
-import mongoose from "mongoose";
-import { Ticket } from "../../models/ticket";
 import { Order } from "../../models/order";
-import { OrderStatus } from "@ticketing-bujosa/common";
+import { Ticket } from "../../models/ticket";
 
-it("resturns an error if the ticket does not exist", async () => {
-  const ticket = mongoose.Types.ObjectId();
+it("returns an error if the ticket does not exist", async () => {
+  const ticketId = mongoose.Types.ObjectId();
+
   await request(app)
     .post("/api/orders")
     .set("Cookie", global.signin())
-    .send({ ticket })
+    .send({ ticketId })
     .expect(404);
 });
 
-it("resturns an error if the ticket is already resolved", async () => {
+it("returns an error if the ticket is already reserved", async () => {
   const ticket = Ticket.build({
     title: "concert",
     price: 20,
   });
-
   await ticket.save();
-
   const order = Order.build({
-    ticket: ticket,
-    user: "fjkrfrksfkf",
+    ticket,
+    user: "laskdflkajsdf",
     status: OrderStatus.Created,
     expiresAt: new Date(),
   });
-
-  const res = await order.save();
-  console.log("order", res);
+  await order.save();
 
   await request(app)
     .post("/api/orders")
     .set("Cookie", global.signin())
-    .send({ ticket: ticket._id })
+    .send({ ticketId: ticket.id })
     .expect(400);
 });
 
@@ -44,12 +41,13 @@ it("reserves a ticket", async () => {
     title: "concert",
     price: 20,
   });
-
   await ticket.save();
-  console.log("hola ", ticket);
-  const respon = await request(app)
+
+  await request(app)
     .post("/api/orders")
     .set("Cookie", global.signin())
-    .send({ ticket: ticket._id })
+    .send({ ticket: ticket.id })
     .expect(201);
 });
+
+it.todo("emits an order created event");

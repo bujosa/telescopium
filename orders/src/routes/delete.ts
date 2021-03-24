@@ -1,33 +1,33 @@
-import request from "supertest";
-import { app } from "../app";
-import { Ticket } from "../models/ticket";
+import {
+  NotAuthorizedError,
+  NotFoundError,
+  OrderStatus,
+  requireAuth,
+} from "@ticketing-bujosa/common";
+import express, { Request, Response } from "express";
 import { Order } from "../models/order";
-import { OrderStatus } from "@ticketing-bujosa/common";
 
-it("marks an order as cancelled", async () => {
-  const ticket = Ticket.build({
-    title: "concert",
-    price: 20,
-  });
-  await ticket.save();
+const router = express.Router();
 
-  const user = global.signin();
+router.delete(
+  "/api/orders/:orderId",
+  requireAuth,
+  async (req: Request, res: Response) => {
+    const { orderId } = req.params;
 
-  const { body: order } = await request(app)
-    .post("/api/orders")
-    .set("Cookie", user)
-    .send({ ticket: ticket.id })
-    .expect(201);
+    const order = await Order.findById(orderId);
 
-  await request(app)
-    .delete(`/api/orders/${order.id}`)
-    .set("Cookie", user)
-    .send()
-    .expect(204);
+    if (!order) {
+      throw new NotFoundError();
+    }
+    if (order.user !== req.currentUser!.id) {
+      throw new NotAuthorizedError();
+    }
+    order.status = OrderStatus.Cancelled;
+    await order.save();
 
-  const updatedOrder = await Order.findById(order.id);
+    res.status(204).send(order);
+  }
+);
 
-  expect(updatedOrder!.status).toEqual(OrderStatus.Cancelled);
-});
-
-it.todo("emits a order cancelled event");
+export { router as deleteOrderRouter };
