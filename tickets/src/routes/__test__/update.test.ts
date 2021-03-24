@@ -1,7 +1,7 @@
 import request from "supertest";
 import { app } from "../../app";
 import mongoose from "mongoose";
-import { natsWraper } from "../../nats-wrapper";
+import { natsWrapper } from "../../nats-wrapper";
 
 it("Returns a 404 if the provided id does not exist ", async () => {
   const id = new mongoose.Types.ObjectId().toHexString();
@@ -52,7 +52,7 @@ it("Returns a 400 if ther user provides and invalid title or price", async () =>
     .post("/api/tickets")
     .set("Cookie", cookie)
     .send({
-      title: "test",
+      title: "test_test",
       price: 20,
     });
 
@@ -123,5 +123,5 @@ it("publishes an event", async () => {
     })
     .expect(200);
 
-  expect(natsWraper.client.publish).toHaveBeenCalled();
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });

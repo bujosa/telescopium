@@ -46,7 +46,7 @@ global.signin = () => {
     email: "test@test.com",
   };
 
-  const token = jwt.sign(payload, process.env.JWT!);
+  const token = jwt.sign(payload, process.env.JWT_KEY!);
 
   const session = { jwt: token };
 

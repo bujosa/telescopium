@@ -1,7 +1,7 @@
 import request from "supertest";
 import { app } from "../../app";
 import { Ticket } from "../../models/ticket";
-import { natsWraper } from "../../nats-wrapper";
+import { natsWrapper } from "../../nats-wrapper";
 
 it("Has a route handler listening to /api/tickets fro post request", async () => {
   const response = await request(app).post("/api/tickets").send({});
@@ -93,5 +93,5 @@ it("publishes an event", async () => {
     })
     .expect(201);
 
-  expect(natsWraper.client.publish).toHaveBeenCalled();
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });

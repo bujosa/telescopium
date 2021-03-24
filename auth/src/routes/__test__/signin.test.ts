@@ -44,7 +44,7 @@ it("responds with a cookie wehn given valid credentials", async () => {
       email: "test@test.com",
       password: "password",
     })
-    .expect(201);
+    .expect(200);
 
   expect(response.get("Set-Cookie")).toBeDefined();
 });
