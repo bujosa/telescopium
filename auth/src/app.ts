@@ -7,9 +7,6 @@ import { signinRouter } from "./routes/signin";
 import { signoutRouter } from "./routes/signout";
 import { signupRouter } from "./routes/signup";
 import { errorHandler, NotFoundError } from "@ticketing-bujosa/common";
-import * as dotenv from "dotenv";
-
-dotenv.config();
 
 const app = express();
 app.set("trust proxy", true);

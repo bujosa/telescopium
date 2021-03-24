@@ -1,39 +1,50 @@
 import mongoose from "mongoose";
 import { app } from "./app";
-import { natsWraper } from "./nats-wrapper";
-import { randomBytes } from "crypto";
+import { natsWrapper } from "./nats-wrapper";
 
 const start = async () => {
-  if (!process.env.JWT) {
+  if (!process.env.JWT_KEY) {
     throw new Error("JWT_KEY must be defined");
   }
   if (!process.env.MONGO_URL) {
     throw new Error("MONGO_URI must be defined");
   }
-
+  if (!process.env.NATS_CLIENT_ID) {
+    throw new Error("NATS_CLIENT_ID must be defined");
+  }
+  if (!process.env.NATS_URL) {
+    throw new Error("NATS_URL must be defined");
+  }
+  if (!process.env.NATS_CLUSTER_ID) {
+    throw new Error("NATS_CLUSTER_ID must be defined");
+  }
   try {
-    await natsWraper.connect(
-      process.env.NAST_CLUSTER_ID!,
-      randomBytes(4).toString("hex"),
-      process.env.NATS_URL!
+    await natsWrapper.connect(
+      process.env.NATS_CLUSTER_ID,
+      process.env.NATS_CLIENT_ID,
+      process.env.NATS_URL
     );
-    natsWraper.client.on("close", () => {
+    console.log("aqui");
+    natsWrapper.client.on("close", () => {
       console.log("Nats Connection closed");
       process.exit();
     });
 
-    process.on("SIGINT", () => natsWraper.client.close());
-    process.on("SIGTERM", () => natsWraper.client.close());
+    process.on("SIGINT", () => natsWrapper.client.close());
+    process.on("SIGTERM", () => natsWrapper.client.close());
 
-    await mongoose.connect(process.env.MONGO_URL!, {
+    await mongoose.connect(process.env.MONGO_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
     });
-  } catch (error) {}
+    console.log("Mongo Connection is open");
+  } catch (error) {
+    console.log("error");
+  }
 
-  app.listen(process.env.PORT, () => {
-    console.log(`Listening on port ${process.env.PORT}`);
+  app.listen(3000, () => {
+    console.log(`Listening on port 3000`);
   });
 };
 
