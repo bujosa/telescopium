@@ -8,7 +8,7 @@ const createTicket = () => {
     .send({ title: "test", price: 20 });
 };
 
-it("Can fetch a list of tickets", async () => {
+describe("Can fetch a list of tickets", async () => {
   await createTicket();
   await createTicket();
   await createTicket();

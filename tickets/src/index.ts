@@ -22,6 +22,7 @@ const start = async () => {
       useUnifiedTopology: true,
       useCreateIndex: true,
     });
+    console.log("Conneting to de database");
   } catch (error) {}
 
   app.listen(3000, () => {
