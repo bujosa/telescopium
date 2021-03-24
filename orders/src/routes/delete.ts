@@ -1,9 +1,33 @@
-import express, { Request, Response } from "express";
+import request from "supertest";
+import { app } from "../app";
+import { Ticket } from "../models/ticket";
+import { Order } from "../models/order";
+import { OrderStatus } from "@ticketing-bujosa/common";
 
-const router = express.Router();
+it("marks an order as cancelled", async () => {
+  const ticket = Ticket.build({
+    title: "concert",
+    price: 20,
+  });
+  await ticket.save();
 
-router.delete("/api/orders/:orderId", async (req: Request, res: Response) => {
-  res.send({});
+  const user = global.signin();
+
+  const { body: order } = await request(app)
+    .post("/api/orders")
+    .set("Cookie", user)
+    .send({ ticket: ticket.id })
+    .expect(201);
+
+  await request(app)
+    .delete(`/api/orders/${order.id}`)
+    .set("Cookie", user)
+    .send()
+    .expect(204);
+
+  const updatedOrder = await Order.findById(order.id);
+
+  expect(updatedOrder!.status).toEqual(OrderStatus.Cancelled);
 });
 
-export { router as deleteOrderRouter };
+it.todo("emits a order cancelled event");
