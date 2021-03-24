@@ -7,13 +7,10 @@ import {
   errorHandler,
   NotFoundError,
 } from "@ticketing-bujosa/common";
-import * as dotenv from "dotenv";
 import { createTicketRouter } from "./routes/new";
 import { showTicketRouter } from "./routes/show";
 import { getAllTicketsRouter } from "./routes/tickets";
 import { updateTicketRouter } from "./routes/update";
-
-dotenv.config();
 
 const app = express();
 app.set("trust proxy", true);
