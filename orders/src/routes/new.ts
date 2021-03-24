@@ -27,13 +27,15 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const ticket = await Ticket.findById(req.body.ticket);
+    const { ticket } = req.body;
+    const ticketDB = await Ticket.findById(ticket);
 
-    if (!ticket) {
+    console.log("ticket");
+    if (!ticketDB) {
       throw new NotFoundError();
     }
 
-    const isReserved = await ticket.isReserved();
+    const isReserved = await ticketDB.isReserved();
 
     if (isReserved) {
       throw new BadRequestError("Ticket is already reserved");
@@ -46,7 +48,7 @@ router.post(
       user: req.currentUser!.id,
       status: OrderStatus.Created,
       expiresAt: expiration,
-      ticket,
+      ticket: ticketDB,
     });
 
     await order.save();
