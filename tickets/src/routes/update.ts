@@ -8,7 +8,7 @@ import express, { Request, Response } from "express";
 import { Ticket } from "../models/ticket";
 import { body } from "express-validator";
 import { TicketUpdatedPublisher } from "../events/publishers/ticket-update-publisher";
-import { natsWraper } from "../nats-wrapper";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -38,7 +38,7 @@ router.put(
     });
 
     await ticket.save();
-    new TicketUpdatedPublisher(natsWraper.client).publish({
+    new TicketUpdatedPublisher(natsWrapper.client).publish({
       id: ticket.id,
       title: ticket.title,
       price: ticket.price,
