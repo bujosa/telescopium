@@ -1,60 +1,56 @@
-import {
-  BadRequestError,
-  NotFoundError,
-  OrderStatus,
-  requireAuth,
-  validateRequest,
-} from "@ticketing-bujosa/common";
-import express, { Request, Response } from "express";
-import { body } from "express-validator";
 import mongoose from "mongoose";
-import { Order } from "../models/order";
+import request from "supertest";
+import { app } from "./../app";
 import { Ticket } from "../models/ticket";
+import { Order } from "../models/order";
+import { OrderStatus } from "@ticketing-bujosa/common";
 
-const router = express.Router();
+it("returns an error if the ticket does not exist", async () => {
+  const ticketId = mongoose.Types.ObjectId();
 
-const EXPIRATION_WINDOW_SECONDS = 15 * 60;
+  await request(app)
+    .post("/api/orders")
+    .set("Cookie", global.signin())
+    .send({ ticketId })
+    .expect(404);
+});
 
-router.post(
-  "/api/orders",
-  requireAuth,
-  [
-    body("ticket")
-      .not()
-      .isEmpty()
-      .custom((input: string) => mongoose.Types.ObjectId.isValid(input))
-      .withMessage("TicketId must be provided"),
-  ],
-  validateRequest,
-  async (req: Request, res: Response) => {
-    const { ticket } = req.body;
-    const ticketDB = await Ticket.findById(ticket);
+it("returns an error if the ticket is already reserved", async () => {
+  const ticket = Ticket.build({
+    title: "concert",
+    price: 20,
+  });
 
-    console.log("ticket");
-    if (!ticketDB) {
-      throw new NotFoundError();
-    }
+  await ticket.save();
 
-    const isReserved = await ticketDB.isReserved();
+  const order = Order.build({
+    ticket,
+    user: "laskdflkajsdf",
+    status: OrderStatus.Created,
+    expiresAt: new Date(),
+  });
 
-    if (isReserved) {
-      throw new BadRequestError("Ticket is already reserved");
-    }
+  await order.save();
 
-    const expiration = new Date();
-    expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
+  await request(app)
+    .post("/api/orders")
+    .set("Cookie", global.signin())
+    .send({ ticket: ticket.id })
+    .expect(400);
+});
 
-    const order = Order.build({
-      user: req.currentUser!.id,
-      status: OrderStatus.Created,
-      expiresAt: expiration,
-      ticket: ticketDB,
-    });
+it("reserves a ticket", async () => {
+  const ticket = Ticket.build({
+    title: "concert",
+    price: 20,
+  });
+  await ticket.save();
 
-    await order.save();
+  await request(app)
+    .post("/api/orders")
+    .set("Cookie", global.signin())
+    .send({ ticket: ticket.id })
+    .expect(201);
+});
 
-    res.status(201).send(order);
-  }
-);
-
-export { router as newOrderRouter };
+it.todo("emits an order created event");
