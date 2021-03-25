@@ -30,6 +30,10 @@ const ticketSchema = new mongoose.Schema(
 ticketSchema.set("versionKey", "version");
 ticketSchema.plugin(updateIfCurrentPlugin);
 
+ticketSchema.statics.findByEvent = (event: { id: string; version: number }) => {
+  return Ticket.findOne({ _id: event.id, version: event.version - 1 });
+};
+
 ticketSchema.statics.build = (ticket: Ticket) => {
   return new Ticket({
     _id: ticket.id,

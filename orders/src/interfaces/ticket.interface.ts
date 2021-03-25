@@ -15,4 +15,8 @@ export interface TicketDoc extends mongoose.Document {
 
 export interface TicketModel extends mongoose.Model<TicketDoc> {
   build(ticket: Ticket): TicketDoc;
+  findByEvent(event: {
+    id: string;
+    version: number;
+  }): Promise<TicketDoc | null>;
 }
