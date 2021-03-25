@@ -1,9 +1,9 @@
 import {
   Publisher,
   Subjects,
-  TicketUpdateEvent,
+  TicketUpdatedEvent,
 } from "@ticketing-bujosa/common";
 
-export class TicketUpdatedPublisher extends Publisher<TicketUpdateEvent> {
+export class TicketUpdatedPublisher extends Publisher<TicketUpdatedEvent> {
   readonly subject: Subjects.TicketUpdated = Subjects.TicketUpdated;
 }
