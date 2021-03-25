@@ -4,6 +4,7 @@ export interface ITicket {
   title: string;
   price: number;
   user: string;
+  version: number;
 }
 
 export interface ITicketDoc extends mongoose.Document {
