@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import {
   ITicket,
-  ITicketDoc,
+  TicketDoc,
   ITicketModel,
 } from "../interfaces/ticket.interface";
 
@@ -39,6 +39,6 @@ ticketSchema.statics.build = (ticket: ITicket) => {
   return new Ticket(ticket);
 };
 
-const Ticket = mongoose.model<ITicketDoc, ITicketModel>("Ticket", ticketSchema);
+const Ticket = mongoose.model<TicketDoc, ITicketModel>("Ticket", ticketSchema);
 
 export { Ticket };

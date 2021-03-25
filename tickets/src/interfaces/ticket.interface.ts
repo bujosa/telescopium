@@ -6,13 +6,13 @@ export interface ITicket {
   user: string;
 }
 
-export interface ITicketDoc extends mongoose.Document {
+export interface TicketDoc extends mongoose.Document {
   title: string;
   price: number;
   user: string;
   version: number;
 }
 
-export interface ITicketModel extends mongoose.Model<ITicketDoc> {
-  build(ticket: ITicket): ITicketDoc;
+export interface ITicketModel extends mongoose.Model<TicketDoc> {
+  build(ticket: ITicket): TicketDoc;
 }

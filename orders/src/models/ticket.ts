@@ -2,6 +2,7 @@ import { OrderStatus } from "@ticketing-bujosa/common";
 import mongoose from "mongoose";
 import { Ticket, TicketDoc, TicketModel } from "../interfaces/ticket.interface";
 import { Order } from "./order";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 const ticketSchema = new mongoose.Schema(
   {
@@ -26,6 +27,9 @@ const ticketSchema = new mongoose.Schema(
   }
 );
 
+ticketSchema.set("versionKey", "version");
+ticketSchema.plugin(updateIfCurrentPlugin);
+
 ticketSchema.statics.build = (ticket: Ticket) => {
   return new Ticket({
     _id: ticket.id,
@@ -35,7 +39,6 @@ ticketSchema.statics.build = (ticket: Ticket) => {
 };
 
 ticketSchema.methods.isReserved = async function () {
-  // this === the ticket document that we just called 'isReserved' on
   const existingOrder = await Order.findOne({
     //@ts-ignore
     ticket: this,

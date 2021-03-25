@@ -8,7 +8,7 @@ const createTicket = () => {
     .send({ title: "test", price: 20 });
 };
 
-describe("Can fetch a list of tickets", async () => {
+it("Can fetch a list of tickets", async (done) => {
   await createTicket();
   await createTicket();
   await createTicket();
@@ -16,4 +16,6 @@ describe("Can fetch a list of tickets", async () => {
   const response = await request(app).get("/api/tickets").send().expect(200);
 
   expect(response.body.length).toEqual(3);
+
+  return done();
 });
