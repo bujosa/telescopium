@@ -1,17 +1,17 @@
 import {
   Listener,
   Subjects,
-  TicketUpdateEvent,
+  TicketUpdatedEvent,
 } from "@ticketing-bujosa/common";
 import { Message } from "node-nats-streaming";
 import { Ticket } from "../../models/ticket";
 import { queueGroupName } from "./queue-group-name";
 
-export class TicketUpdatedListener extends Listener<TicketUpdateEvent> {
+export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
   subject: Subjects.TicketUpdated = Subjects.TicketUpdated;
   queueGroupName = queueGroupName;
 
-  async onMessage(data: TicketUpdateEvent["data"], msg: Message) {
+  async onMessage(data: TicketUpdatedEvent["data"], msg: Message) {
     const { title, price, id } = data;
     const ticket = await Ticket.findById(id);
 
