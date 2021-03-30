@@ -1,5 +1,6 @@
 import { OrderStatus } from "@ticketing-bujosa/common";
 import mongoose from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { Order, OrderDoc, OrderModel } from "../interfaces/order.interface";
 
 const orderSchema = new mongoose.Schema(
@@ -32,6 +33,8 @@ const orderSchema = new mongoose.Schema(
   }
 );
 
+orderSchema.set("versionKey", "version");
+orderSchema.plugin(updateIfCurrentPlugin);
 orderSchema.statics.build = (order: Order) => {
   return new Order(order);
 };
