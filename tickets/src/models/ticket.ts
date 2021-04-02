@@ -20,6 +20,9 @@ const ticketSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    order: {
+      type: String,
+    },
   },
   {
     toJSON: {
