@@ -35,3 +35,15 @@ const setup = async () => {
 
   return { msg, ticket, data, listener };
 };
+
+it("sets the user of the ticket", async () => {
+  const { listener, ticket, data, msg } = await setup();
+
+  await listener.onMessage(data, msg);
+
+  const updatedTicket = await Ticket.findById(ticket.id);
+
+  expect(updatedTicket!.order).toEqual(data.id);
+});
+
+it("acks the message", async () => {});
