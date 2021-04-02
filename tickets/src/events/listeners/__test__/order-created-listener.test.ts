@@ -3,6 +3,7 @@ import { Ticket } from "../../../models/ticket";
 import { natsWrapper } from "../../../nats-wrapper";
 import { OrderCreatedListener } from "../order-created-listener";
 import mongoose from "mongoose";
+import { Message } from "node-nats-streaming";
 
 const setup = async () => {
   const listener = new OrderCreatedListener(natsWrapper.client);
@@ -26,4 +27,11 @@ const setup = async () => {
       price: ticket.price,
     },
   };
+
+  // @ts-ignore
+  const msg: Message = {
+    ack: jest.fn(),
+  };
+
+  return { msg, ticket, data, listener };
 };
