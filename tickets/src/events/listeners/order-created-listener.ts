@@ -5,6 +5,7 @@ import {
 } from "@ticketing-bujosa/common";
 import { Message } from "node-nats-streaming";
 import { Ticket } from "../../models/ticket";
+import { TicketUpdatedPublisher } from "../publishers/ticket-update-publisher";
 import { queueGroupName } from "./queue-group-name";
 
 export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
@@ -21,6 +22,7 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
     ticket.set({ order: data.id });
 
     await ticket.save();
+    new TicketUpdatedPublisher(this.client);
 
     msg.ack();
   }
