@@ -11,7 +11,7 @@ export interface TicketDoc extends mongoose.Document {
   price: number;
   user: string;
   version: number;
-  order: string;
+  order?: string;
 }
 
 export interface ITicketModel extends mongoose.Model<TicketDoc> {
