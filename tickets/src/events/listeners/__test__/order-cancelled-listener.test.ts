@@ -1,4 +1,4 @@
-import { OrderCancelledEvent, OrderStatus } from "@ticketing-bujosa/common";
+import { OrderCancelledEvent } from "@ticketing-bujosa/common";
 import { Ticket } from "../../../models/ticket";
 import { natsWrapper } from "../../../nats-wrapper";
 import mongoose from "mongoose";
@@ -33,3 +33,15 @@ const setup = async () => {
 
   return { msg, ticket, data, listener, order };
 };
+
+it("updates the ticket, publishes an event, and acks the message", async () => {
+  const { listener, ticket, data, msg } = await setup();
+
+  await listener.onMessage(data, msg);
+
+  const updatedTicket = await Ticket.findById(ticket.id);
+
+  expect(updatedTicket!.order).not.toBeDefined();
+  expect(msg.ack).toHaveBeenCalled();
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
