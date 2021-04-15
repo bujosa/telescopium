@@ -14,7 +14,7 @@ spec:
       spec:
         containers:
           - name: expiration
-            image: us.gcr.io/ticketing-dev-305703/tickets
+            image: us.gcr.io/ticketing-dev-305703/expiration
             env:
               - name: NATS_CLIENT_ID
                 valueFrom:
@@ -24,17 +24,5 @@ spec:
                 value: 'http://nats-service:4222'
               - name: NATS_CLUSTER_ID
                 value: tickets
-                
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: tickets-service
-spec:
-  selector:
-    app: tickets
-  ports:
-    - name: tickets
-      protocol: TCP
-      port: 3000
-      targetPort: 3000
+              - name: REDIS_HOST
+                value: expiration-redis-service
