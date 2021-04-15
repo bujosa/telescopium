@@ -1,30 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-mongo-deployment
+  name: expiration-redis-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth-mongo
+      app: expiration-redis
   template:
     metadata:
       labels:
-        app: auth-mongo
+        app: expiration-redis
     spec:
       containers:
-        - name: auth-mongo
-          image: mongo
+        - name: expiration-redis
+          image: redis
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-mongo-service
+  name: expiration-redis-service
 spec:
   selector:
-    app: auth-mongo
+    app: expiration-redis
   ports:
     - name: db
       protocol: TCP
-      port: 27017
-      targetPort: 27017
+      port: 6379
+      targetPort: 6379
