@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tickets-deployment 
+  name: expiration-deployment 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: tickets
+      app: expiration
   template:
       metadata:
         labels:
-          app: tickets
+          app: expiration
       spec:
         containers:
-          - name: tickets
+          - name: expiration
             image: us.gcr.io/ticketing-dev-305703/tickets
             env:
               - name: NATS_CLIENT_ID
@@ -24,13 +24,7 @@ spec:
                 value: 'http://nats-service:4222'
               - name: NATS_CLUSTER_ID
                 value: tickets
-              - name: MONGO_URL
-                value: 'mongodb://tickets-mongo-service:27017/tickets'
-              - name: JWT_KEY
-                valueFrom:
-                  secretKeyRef:
-                    name: jwt-secret
-                    key: JWT_KEY
+                
 ---
 apiVersion: v1
 kind: Service
