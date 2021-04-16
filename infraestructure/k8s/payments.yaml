@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-deployment 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payments
+  template:
+      metadata:
+        labels:
+          app: payments
+      spec:
+        containers:
+          - name: payments
+            image: us.gcr.io/ticketing-dev-305703/payments
+            env:
+              - name: NATS_CLIENT_ID
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.name
+              - name: NATS_URL
+                value: 'http://nats-service:4222'
+              - name: NATS_CLUSTER_ID
+                value: payments
+              - name: MONGO_URL
+                value: 'mongodb://payments-mongo-service:27017/payments'
+              - name: JWT_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: jwt-secret
+                    key: JWT_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payments-service
+spec:
+  selector:
+    app: payments
+  ports:
+    - name: payments
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
