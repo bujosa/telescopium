@@ -15,7 +15,9 @@ export * from "./enums/order-status";
 
 export * from "./bases/base-listener";
 export * from "./bases/base-publisher";
+
 export * from "./interfaces/ticket-updated-event.interface";
 export * from "./interfaces/ticket-created-event.interface";
 export * from "./interfaces/order-cancelled-event.interface";
 export * from "./interfaces/order-created-event.interface";
+export * from "./interfaces/expiration-complete-event.interface";
