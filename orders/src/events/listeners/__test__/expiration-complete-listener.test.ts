@@ -1,12 +1,17 @@
 import { natsWrapper } from "../../../nats-wrapper";
-import { TicketUpdatedListener } from "../ticket-updated-listener";
 import mongoose from "mongoose";
 import { Ticket } from "../../../models/ticket";
 import { Message } from "node-nats-streaming";
-import { TicketUpdatedEvent } from "@ticketing-bujosa/common";
+import {
+  ExpirationCompleteEvent,
+  OrderStatus,
+  TicketUpdatedEvent,
+} from "@ticketing-bujosa/common";
+import { ExpirationCompleteListener } from "../expiration-complete-listener";
+import { Order } from "../../../models/order";
 
 const setup = async () => {
-  const listener = new TicketUpdatedListener(natsWrapper.client);
+  const listener = new ExpirationCompleteListener(natsWrapper.client);
 
   const ticket = Ticket.build({
     id: mongoose.Types.ObjectId().toHexString(),
@@ -16,12 +21,17 @@ const setup = async () => {
 
   await ticket.save();
 
-  const data: TicketUpdatedEvent["data"] = {
-    id: ticket.id,
-    version: ticket.version + 1,
-    title: "new title",
-    price: 999,
+  const order = Order.build({
+    status: OrderStatus.Created,
+    expiresAt: new Date(),
+    ticket,
     user: "test",
+  });
+
+  await order.save();
+
+  const data: ExpirationCompleteEvent["data"] = {
+    order: order.id,
   };
 
   // @ts-ignore
@@ -29,19 +39,31 @@ const setup = async () => {
     ack: jest.fn(),
   };
 
-  return { listener, msg, data, ticket };
+  return { listener, msg, data, ticket, order };
 };
 
-it("finds, updates and saves a ticket", async () => {
-  const { listener, msg, data, ticket } = await setup();
+it("updates the order status to cancelled", async () => {
+  const { listener, msg, data, ticket, order } = await setup();
 
   await listener.onMessage(data, msg);
 
-  const updatedTicket = await Ticket.findById(ticket.id);
+  const updatedOrder = await Order.findById(order.id);
 
-  expect(updatedTicket?.title).toEqual(data.title);
-  expect(updatedTicket?.price).toEqual(data.price);
-  expect(updatedTicket?.version).toEqual(data.version);
+  expect(updatedOrder?.status).toEqual(OrderStatus.Cancelled);
+});
+
+it("emit an OrderCancelled event", async () => {
+  const { listener, msg, data, order } = await setup();
+
+  await listener.onMessage(data, msg);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+
+  const eventData = JSON.parse(
+    (natsWrapper.client.publish as jest.Mock).mock.calls[0][1]
+  );
+
+  expect(eventData.id).toEqual(order.id);
 });
 
 it("acks the messages", async () => {
@@ -50,15 +72,4 @@ it("acks the messages", async () => {
   await listener.onMessage(data, msg);
 
   expect(msg.ack).toHaveBeenCalled();
-});
-
-it("does not call ack if the event has a skipped version number", async () => {
-  const { msg, data, listener, ticket } = await setup();
-  data.version = 10;
-
-  try {
-    await listener.onMessage(data, msg);
-  } catch (err) {}
-
-  expect(msg.ack).not.toHaveBeenCalled();
 });
