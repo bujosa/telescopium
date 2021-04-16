@@ -1,7 +1,6 @@
 import {
   Listener,
   OrderCreatedEvent,
-  OrderStatus,
   Subjects,
 } from "@ticketing-bujosa/common";
 import { Message } from "node-nats-streaming";
