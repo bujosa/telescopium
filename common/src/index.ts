@@ -21,3 +21,4 @@ export * from "./interfaces/ticket-created-event.interface";
 export * from "./interfaces/order-cancelled-event.interface";
 export * from "./interfaces/order-created-event.interface";
 export * from "./interfaces/expiration-complete-event.interface";
+export * from "./interfaces/payment-created-event.interface";
