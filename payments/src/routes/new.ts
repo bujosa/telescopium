@@ -20,7 +20,6 @@ router.post(
   validateRequest,
   async (req: Request, res: Response) => {
     const { token, order } = req.body;
-
     const order_db = await Order.findById(order);
 
     if (!order_db) {
