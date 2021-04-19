@@ -3,8 +3,7 @@ import { app } from "../../app";
 import mongoose from "mongoose";
 import { Order } from "../../models/order";
 import { OrderStatus } from "@ticketing-bujosa/common";
-
-jest.mock("../../stripe");
+import { stripe } from "../../stripe";
 
 it("returns a 404 when purchasing an order that does not exist", async () => {
   await request(app)
@@ -52,15 +51,15 @@ it("returns a 400 when purchasing a cancelled order", async () => {
     .expect(400);
 });
 
-it("returns a 204 with valid inputs", async () => {
+it("returns a 201 with valid inputs", async () => {
   const user = mongoose.Types.ObjectId().toHexString();
-
+  const price = Math.floor(Math.random() * 10000);
   const order = Order.build({
     id: mongoose.Types.ObjectId().toHexString(),
     user,
     version: 0,
-    price: 30,
-    status: OrderStatus.Cancelled,
+    price,
+    status: OrderStatus.Created,
   });
 
   await order.save();
@@ -69,5 +68,13 @@ it("returns a 204 with valid inputs", async () => {
     .post("/api/payments")
     .set("Cookie", global.signin(user))
     .send({ token: "tok_visa", order: order.id })
-    .expect(204);
+    .expect(201);
+
+  const stripeCharges = await stripe.charges.list({ limit: 50 });
+  const stripeCharge = stripeCharges.data.find((charge) => {
+    return charge.amount === price * 100;
+  });
+
+  expect(stripeCharge).toBeDefined();
+  expect(stripeCharge!.currency).toEqual("usd");
 });
