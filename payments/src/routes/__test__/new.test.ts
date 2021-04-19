@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 import { Order } from "../../models/order";
 import { OrderStatus } from "@ticketing-bujosa/common";
 
+jest.mock("../../stripe");
+
 it("returns a 404 when purchasing an order that does not exist", async () => {
   await request(app)
     .post("/api/payments")
@@ -48,4 +50,24 @@ it("returns a 400 when purchasing a cancelled order", async () => {
     .set("Cookie", global.signin(user))
     .send({ token: "test", order: order.id })
     .expect(400);
+});
+
+it("returns a 204 with valid inputs", async () => {
+  const user = mongoose.Types.ObjectId().toHexString();
+
+  const order = Order.build({
+    id: mongoose.Types.ObjectId().toHexString(),
+    user,
+    version: 0,
+    price: 30,
+    status: OrderStatus.Cancelled,
+  });
+
+  await order.save();
+
+  await request(app)
+    .post("/api/payments")
+    .set("Cookie", global.signin(user))
+    .send({ token: "tok_visa", order: order.id })
+    .expect(204);
 });
