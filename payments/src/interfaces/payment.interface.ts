@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export interface Paymnet {
+export interface Payment {
   order: string;
   stripe: string;
 }
@@ -11,4 +11,6 @@ export interface PaymentDoc extends mongoose.Document {
   version: number;
 }
 
-export interface PaymentModel extends mongoose.Model<PaymentDoc> {}
+export interface PaymentModel extends mongoose.Model<PaymentDoc> {
+  build(payment: Payment): PaymentDoc;
+}
