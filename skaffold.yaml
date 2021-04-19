@@ -8,7 +8,7 @@ build:
   googleCloudBuild:
     projectId: ticketing-dev-305703
   artifacts:
-    - image: us.gcr.io/ticketing-dev-305703/auth
+    - image: bujosa/auth
       context: auth
       docker:
         dockerfile: dockerfile
@@ -16,7 +16,7 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: us.gcr.io/ticketing-dev-305703/client
+    - image: bujosa/client
       context: client
       docker:
         dockerfile: dockerfile
@@ -24,7 +24,7 @@ build:
         manual:
           - src: '**/*.js'
             dest: .
-    - image: us.gcr.io/ticketing-dev-305703/tickets
+    - image: bujosa/tickets
       context: tickets
       docker:
         dockerfile: dockerfile
@@ -32,7 +32,7 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: us.gcr.io/ticketing-dev-305703/orders
+    - image: bujosa/orders
       context: orders
       docker:
         dockerfile: dockerfile
@@ -40,7 +40,7 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: us.gcr.io/ticketing-dev-305703/expiration
+    - image: bujosa/expiration
       context: expiration
       docker:
         dockerfile: dockerfile
@@ -48,7 +48,7 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: us.gcr.io/ticketing-dev-305703/payments
+    - image: bujosa/payments
       context: payments
       docker:
         dockerfile: dockerfile
