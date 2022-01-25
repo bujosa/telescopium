@@ -22,11 +22,20 @@ app.use(
     secure: process.env.NODE_ENV !== "test",
   })
 );
+
+// Get Current User
 app.use(currentUser);
 
+// Create Ticket
 app.use(createTicketRouter);
+
+// Shot Ticket
 app.use(showTicketRouter);
+
+// Show tickets
 app.use(getAllTicketsRouter);
+
+// Update ticket
 app.use(updateTicketRouter);
 
 app.all("*", async (req, res) => {
