@@ -10,6 +10,7 @@ const start = async () => {
     });
     console.log("Connecting to database");
   } catch (error) {}
+
   app.listen(3000, () => {
     console.log(`Listening on port 3000`);
   });
